@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using IdentityServer4.EntityFramework.DbContexts;
 using System.Linq;
 using IdentityServer4.EntityFramework.Mappers;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 namespace IdentityServer
 {
@@ -65,10 +66,8 @@ namespace IdentityServer
             services.AddAuthentication()
                 .AddGoogle("Google", options =>
                 {
+                    Configuration.Bind("Google", options);
                     options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-
-                    options.ClientId = "337019312942-m0grsidstdruuo3b4387oa8lj8t7s3id.apps.googleusercontent.com";
-                    options.ClientSecret = "-HmIQylBgwO8w_A8JUrCmnku";
                 })
                 .AddOpenIdConnect("oidc", "OpenID Connect", options =>
                 {
@@ -84,13 +83,9 @@ namespace IdentityServer
                         RoleClaimType = "role"
                     };
                 })
-                .AddOpenIdConnect("okta", "Okta", options =>
-                {
+                .AddOpenIdConnect("okta", "Okta", options => {
+                    Configuration.Bind("Okta", options);
                     options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-                    options.Authority = "https://dev-73182324-admin.okta.com";
-                    options.ClientId = "0oaqe96zkfMj967GW5d6";
-                    options.ClientSecret = "RW_orGUPc1-LZKwB9ekoAbjwwAfu_uKctHcEBDF9";
-                    options.CallbackPath = "/signin-oidc-okta";
                 });
 
 
